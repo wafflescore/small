@@ -64,7 +64,8 @@
       }
 
       input[type="number"],
-      input[type="text"] {
+      input[type="text"],
+      textarea {
         width: 100%;
         min-width: 100px;
         padding: 10px 12px;
@@ -74,6 +75,15 @@
         color: #0f172a;
         font-size: 1rem;
         box-sizing: border-box;
+      }
+
+      textarea {
+        min-height: 44px;
+        resize: vertical;
+      }
+
+      input[data-qty] {
+        max-width: 96px;
       }
 
       .store-note {
@@ -223,10 +233,22 @@
 
       .table-wrap {
         margin-bottom: 16px;
+        overflow-x: visible;
+      }
+
+      table {
+        min-width: 0;
+        font-size: 0.95rem;
       }
 
       th, td {
         padding: 10px 8px;
+        white-space: normal;
+      }
+
+      input[type="number"],
+      input[type="text"] {
+        min-width: 0;
       }
 
       .row-input {
@@ -272,7 +294,7 @@
         <tbody>
         <tr>
           <td><strong>Extra order</strong></td>
-          <td><input type="text" value="0" data-extra="amount" placeholder="100+20+30" aria-label="Extra order amount"></td>
+          <td><textarea data-extra="amount" placeholder="100+20+30" aria-label="Extra order amount" rows="1"></textarea></td>
           <td>—</td>
           <td><span data-line="extra">0.00</span></td>
         </tr>
@@ -301,7 +323,7 @@
 
   <script>
     const storeButtons = document.querySelectorAll('[data-store]');
-    const extraInput = document.querySelector('input[data-extra]');
+    const extraInput = document.querySelector('[data-extra]');
     const serviceCheckbox = document.querySelector('input[data-charge="service"]');
     const vatCheckbox = document.querySelector('input[data-charge="vat"]');
     const totalValue = document.getElementById('totalValue');
@@ -332,11 +354,16 @@
       ],
     };
 
-    function formatMoney(value) {
+    function formatMoney(value, options = {}) {
+      const { minimumFractionDigits = 2, maximumFractionDigits = 2 } = options;
       return Number(value).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits,
+        maximumFractionDigits,
       });
+    }
+
+    function formatLineMoney(value) {
+      return formatMoney(value, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
     }
 
     function getLineElement(key) {
@@ -361,25 +388,7 @@
       platesBody.innerHTML = plateDefinitions[store].map((plate) => `
         <tr>
           <td><strong><span class="plate-icon" style="--plate-bg:${plate.bg}; --plate-ring:${plate.ring}"></span> ${plate.label}</strong></td>
-          <td><input type="number" min="0" step="0.01" value="${plate.price.toFixed(2)}" data-price="${plate.id}" aria-label="${plate.label} price"></td>
-          <td><input type="number" min="0" step="1" value="0" data-qty="${plate.id}" aria-label="${plate.label} quantity"></td>
-          <td><span data-line="${plate.id}">0.00</span></td>
-        </tr>
-      `).join('');
-      attachInputListeners();
-    }
-
-    function attachInputListeners() {
-      document.querySelectorAll('input[data-price]').forEach((input) => input.addEventListener('input', calculateTotal));
-      document.querySelectorAll('input[data-qty]').forEach((input) => input.addEventListener('input', calculateTotal));
-    }
-
-    function renderPlates(store) {
-      currentStore = store;
-      platesBody.innerHTML = plateDefinitions[store].map((plate) => `
-        <tr>
-          <td><strong><span class="plate-icon" style="--plate-bg:${plate.bg}; --plate-ring:${plate.ring}"></span> ${plate.label}</strong></td>
-          <td><input type="number" min="0" step="0.01" value="${plate.price.toFixed(2)}" data-price="${plate.id}" aria-label="${plate.label} price"></td>
+          <td><input type="number" min="0" step="0.01" value="${plate.price}" data-price="${plate.id}" aria-label="${plate.label} price"></td>
           <td><input type="number" min="0" step="1" value="0" data-qty="${plate.id}" aria-label="${plate.label} quantity"></td>
           <td><span data-line="${plate.id}">0.00</span></td>
         </tr>
@@ -396,7 +405,7 @@
       plateDefinitions[store].forEach((plate) => {
         const input = document.querySelector(`input[data-price="${plate.id}"]`);
         if (input) {
-          input.value = plate.price.toFixed(2);
+          input.value = plate.price;
         }
       });
     }
@@ -410,12 +419,12 @@
         const qty = parseFloat(document.querySelector(`input[data-qty="${id}"]`).value) || 0;
         const lineTotal = price * qty;
         subtotal += lineTotal;
-        getLineElement(id).textContent = formatMoney(lineTotal);
+        getLineElement(id).textContent = formatLineMoney(lineTotal);
       });
 
       const extraAmount = parseExtraAmount(extraInput.value);
       subtotal += extraAmount;
-      getLineElement('extra').textContent = formatMoney(extraAmount);
+      getLineElement('extra').textContent = formatLineMoney(extraAmount);
 
       let total = subtotal;
       if (serviceCheckbox.checked) {
