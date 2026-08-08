@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Conveyor Sushi Calculator</title>
+  <title>🍣 Conveyor Sushi Calculator</title>
   <style>
     :root {
       color-scheme: light;
@@ -82,10 +82,23 @@
         font-size: 0.95rem;
       }
 
+    .table-wrap {
+      overflow-x: auto;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 680px;
+      border-collapse: collapse;
+    }
+
     th, td {
       text-align: left;
       padding: 14px 12px;
       border-bottom: 1px solid #e2e8f0;
+      white-space: nowrap;
     }
 
     th {
@@ -184,8 +197,36 @@
     }
 
     @media (max-width: 680px) {
+      body {
+        padding: 16px;
+      }
+
+      .container {
+        width: 100%;
+        padding: 20px;
+      }
+
+      .tabs {
+        gap: 8px;
+      }
+
+      .tab {
+        flex: 1 1 100%;
+        min-width: 0;
+        padding: 12px 14px;
+        text-align: center;
+      }
+
+      .store-note {
+        font-size: 0.9rem;
+      }
+
+      .table-wrap {
+        margin-bottom: 16px;
+      }
+
       th, td {
-        padding: 12px 8px;
+        padding: 10px 8px;
       }
 
       .row-input {
@@ -194,12 +235,16 @@
 
       .total-card {
         grid-template-columns: 1fr;
-        text-align: center;
+        text-align: left;
+      }
+
+      .total-card p {
+        text-align: left;
       }
 
       .footer {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
       }
     }
   </style>
@@ -213,17 +258,18 @@
     </div>
     <p class="store-note">Choose a store tab to load default Thai plate prices, then edit any price and quantity manually as needed.</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Plate colour</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          <th>Line total</th>
-        </tr>
-      </thead>
-      <tbody id="platesBody"></tbody>
-      <tbody>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Plate colour</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Line total</th>
+          </tr>
+        </thead>
+        <tbody id="platesBody"></tbody>
+        <tbody>
         <tr>
           <td><strong>Extra order</strong></td>
           <td><input type="text" value="0" data-extra="amount" placeholder="100+20+30" aria-label="Extra order amount"></td>
@@ -231,7 +277,8 @@
           <td><span data-line="extra">0.00</span></td>
         </tr>
       </tbody>
-    </table>
+      </table>
+    </div>
 
     <div class="toggles">
       <label class="toggle"><input type="checkbox" id="service" data-charge="service"> 10% service charge</label>
