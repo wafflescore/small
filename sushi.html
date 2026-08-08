@@ -67,7 +67,7 @@
       input[type="text"],
       textarea {
         width: 100%;
-        min-width: 100px;
+        min-width: 150px;
         padding: 10px 12px;
         border-radius: 12px;
         border: 1px solid #cbd5e1;
@@ -84,6 +84,7 @@
 
       input[data-qty] {
         max-width: 96px;
+        min-width: 60px;
       }
 
       .store-note {
@@ -189,7 +190,7 @@
 
     .total-card p {
       margin: 0;
-      font-size: 2rem;
+      font-size:1.5rem;
       color: #262729;
     }
 
@@ -347,8 +348,7 @@
         <tbody>
         <tr>
           <td><strong>Extra order</strong></td>
-          <td><textarea data-extra="amount" placeholder="100+20+30" aria-label="Extra order amount" rows="1"></textarea></td>
-          <td>—</td>
+          <td colspan="2"><textarea data-extra="amount" placeholder="100+20+30" aria-label="Extra order amount" rows="1"></textarea></td>
           <td><span data-line="extra">0.00</span></td>
         </tr>
       </tbody>
@@ -360,7 +360,7 @@
         <label class="toggle"><input type="checkbox" id="service" data-charge="service"> Service Charge <span class="percentage-label" data-service-label>(10%)</span></label>
         <label class="toggle"><input type="checkbox" id="vat" data-charge="vat" checked> VAT <span class="percentage-label" data-vat-label>(7%)</span></label>
       </div>
-      <button type="button" class="advanced-button" id="advancedToggle">Show advanced</button>
+      <button type="button" class="advanced-button" id="advancedToggle">Show Options</button>
     </div>
 
     <div class="advanced-panel" id="advancedPanel" hidden>
@@ -529,7 +529,7 @@
     function toggleAdvancedPanel() {
       const hidden = advancedPanel.hasAttribute('hidden');
       advancedPanel.toggleAttribute('hidden', !hidden);
-      advancedToggle.textContent = hidden ? 'Hide advanced' : 'Show advanced';
+      advancedToggle.textContent = hidden ? 'Hide Options' : 'Show Options';
     }
 
     advancedToggle.addEventListener('click', toggleAdvancedPanel);
