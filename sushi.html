@@ -357,8 +357,8 @@
 
     <div class="toggles">
       <div class="toggle-group">
-        <label class="toggle"><input type="checkbox" id="service" data-charge="service"> Service Charge <span class="percentage-label" data-service-label>(10%)</span></label>
-        <label class="toggle"><input type="checkbox" id="vat" data-charge="vat" checked> VAT <span class="percentage-label" data-vat-label>(7%)</span></label>
+        <label class="toggle"><input type="checkbox" id="service" data-charge="service" checked> Service Charge <span class="percentage-label" data-service-label>(10%)</span></label>
+        <label class="toggle"><input type="checkbox" id="vat" data-charge="vat"> VAT <span class="percentage-label" data-vat-label>(7%)</span></label>
       </div>
       <button type="button" class="advanced-button" id="advancedToggle">Show Options</button>
     </div>
@@ -461,7 +461,7 @@
         <tr>
           <td><strong><span class="plate-icon" style="--plate-bg:${plate.bg}; --plate-ring:${plate.ring}"></span> ${plate.label}</strong></td>
           <td><input type="number" min="0" inputmode="numeric" value="${plate.price}" data-price="${plate.id}" aria-label="${plate.label} price"></td>
-          <td><input type="number" min="0" inputmode="numeric" value="0" data-qty="${plate.id}" aria-label="${plate.label} quantity"></td>
+          <td><input type="number" min="0" inputmode="numeric" value="" data-qty="${plate.id}" aria-label="${plate.label} quantity"></td>
           <td><span data-line="${plate.id}">0.00</span></td>
         </tr>
       `).join('');
